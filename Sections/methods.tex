@@ -22,12 +22,14 @@ The key aims are:
 \end{enumerate}
 
 \section{Implementation}
-The project was implemented using python and in particular the numpy library which is off particular use for scientific computing. The reasoning for this is simply out of personal preference and the excellent facility for easy data visualisation through jupyter notebooks. 
+The project was implemented using python and in particular the numpy library which is off particular use for scientific computing and the scipy library which is built on top of numpy to provide specific engineering and scientific computing tools. The reasoning for this is simply out of personal preference and the excellent facility for easy data visualisation through jupyter notebooks. 
 
-\section{Stage 1: Development of Understanding}
+\section{Stage 1: Development of Understanding} 
+
+###include complex sinusoid explanation
 The importance of developing a good simulation tool is essential in order to help assess the performance of the final algorithm as there are a lot of unknowns regarding the real data the ability to be able to create like for like simulations with known quantities is essential.
 \\\\
-The first stage involves an investigation into the real recording already present. In order to develop an understanding of the real data in order to help validate the later stages.
+The first stage involves an investigation into the real recording already present. In order to develop an understanding of the real data in order to help validate the later stages. Particular techniques used include the the use of the Fast Fourier Transform which is the computationally efficient implementation of the Fourier Transfrom this is contained within scipy.
 \\\\
 This stage involved the basic steps of signal receptions, and developing these software tools for use later on:
 
@@ -38,11 +40,15 @@ This stage involved the basic steps of signal receptions, and developing these s
 
     \item Downconvert
 
-            Downconversion is the process of essentially removing the carrier frequency. 
+            Downconversion is the process of essentially removing the carrier frequency. This is generally achieved as illustrated by figure \ref{fig:downconversion} and described mathematically by equation \ref{eq: downconversion}. In the frequency domain this produces a spike at 0 and $2f_c$.
+            \begin{equation}
+                d(t) = s(t) e^{2 \pi f_c t j}
+                \label{eq: downconversion}
+            \end{equation}
 
-    \item Low Pass Filter
+    \item Low Pass Filter 
 
-            Another box car filter to extract the baseband signal
+            Another box car filter to extract the baseband signal from the complex multiplication. This is necessary to remove the peak at $2f_c$
 
     \item Demodulate
 
@@ -70,7 +76,7 @@ This stage involved the basic steps of signal receptions, and developing these s
     \centering
     \includegraphics[width = \textwidth]{figs/method/downconversion.png}
     \caption{}
-    \label{fig:my_label}
+    \label{fig:downconversion}
 \end{figure}
 
 The real data used consists of two seconds of data recorded using a sampling frequency of 1\si{\mega\hertz}. This stage of the exercise is to establish which of many VLF transmitters around the world are present in the recording \cite{wikipediaVLF}. The transmitters that are expected to be received are shown by table \ref{tab:vlftransmitters}.
@@ -127,7 +133,7 @@ The principle of the algorithm is based on several known conditions. The process
 
 \section{Stage 4: Testing and Evaluation}
 The final stage of the investigation is to combine the developed tools in order to investigate the performance of the developed algorithm. The aims of this is to assess the breakdown point of the algorithm by simulating different scenarios with different types of noise. Analyse the cause of breakdown and see if further mitigation is possible.
-\subsection{Investigations}
+\subsection{Investigations}\label{sec:investigations}
 Several investigations need to be carried out in order to assess the limitations of symbol recovery. The main judge of this is the BER as previously mentioned is the number of incorrectly estimated symbols per transmission. This is shown by equation \ref{eq:ber}.
 \begin{equation}
     \text{BER} = log\left(\frac{\text{Incorrect No. Bits}}{\text{Total No. Bits}}\right)

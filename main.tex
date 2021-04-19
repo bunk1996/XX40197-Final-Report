@@ -21,7 +21,7 @@
 \usepackage{float}
 \usepackage{times}
 \usepackage[a4paper, margin=1in]{geometry}
-\usepackage{subfig}
+% \usepackage{subfig}
 \usepackage{subcaption}
 \newcommand*{\transpose}{\mathrm{T}}
 \newcommand*{\vc}[1]{\mathbf{#1}}
@@ -52,6 +52,8 @@
 \renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
 \renewcommand{\thelisting}{\arabic{chapter}.\arabic{listing}}
 
+
+
 \begin{document}
 \begin{titlepage}
     \title{"Submarine Communication during Lightning Interference"\\ Final Report \\ XX40197}
@@ -69,7 +71,7 @@
 \pagenumbering{roman}
 \renewcommand{\thesection}{\Roman{section}}
 \addcontentsline{toc}{section}{List of Figures}
-\listoffigures
+\listofigures
 \pagebreak
 \addcontentsline{toc}{section}{List of Tables}
 \listoftables
@@ -82,13 +84,13 @@
 \setcounter{page}{1}
 \renewcommand{\thesection}{\arabic{chapter}.\arabic{section}}
 % \setstretch{2.0}
-\import{Sections/}{Introduction.tex}
-\pagebreak
-\import{Sections/}{LitReview.tex}
-\pagebreak
-\import{Sections/}{methods.tex}
-\pagebreak
-\import{Sections/}{core.tex}
+% \import{Sections/}{Introduction.tex}
+% \pagebreak
+% \import{Sections/}{LitReview.tex}
+% \pagebreak
+% \import{Sections/}{methods.tex}
+% \pagebreak
+\import{Sections/}{results.tex}
 \renewcommand{\bibname}{References}
 \bibliography{refs}
 
