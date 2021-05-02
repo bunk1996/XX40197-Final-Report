@@ -3,6 +3,7 @@
 \usepackage[british]{babel}
 \usepackage{import}
 \usepackage{setspace}
+% \usepackage{appendix}
 \usepackage[bottom]{footmisc}
 \usepackage{siunitx} % Provides the \SI{}{} and \si{} command for typesetting SI units
 \usepackage{graphicx} % Required for the inclusion of images
@@ -10,7 +11,7 @@
 \usepackage{natbib} % Required to change bibliography style to APA
 \newcommand*{\urlprefix}{Available from: }
 \newcommand*{\urldateprefix}{Accessed }
-\bibliographystyle{bath}
+\bibliographystyle{bath}   
 \usepackage{amsmath} % Required for some math elements
 \usepackage{mathtools}
 \usepackage{caption}
@@ -32,17 +33,20 @@
 \usepackage{wrapfig}
 \usepackage{longtable}
 \usepackage{enumerate}
+\usepackage{titlepic}
 \usepackage{listings}
 \usepackage{python}
+\usepackage{helvet}
+\usepackage{multicol}
 % \usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
-\pagestyle{fancy}
+\pagestyle{empty}
 \usepackage{minted}
 \usepackage[hidelinks]{hyperref}
 \usepackage{python}
 % \renewcommand{\thefigure}{\arabic{section}.\arabic{figure}}
 % \renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
 % \renewcommand{\thetable}{\arabic{section}.\arabic{table}}
-\fancyhead[LE,RO]{Background Review \& Project Plan}
+\fancyhead[LE,RO]{Final Report}
 \fancyhead[RE,LO]{XX40197}
 \fancyfoot[CE,CO]{}
 \fancyfoot[LE,RO]{\thepage}
@@ -56,26 +60,37 @@
 
 \begin{document}
 \begin{titlepage}
-    \title{"Submarine Communication during Lightning Interference"\\ Final Report \\ XX40197}
-    \author{Candidate 13220 \\[0.5cm] Supervisor: Martin Fullerkrug \\[0.5cm] Assessor: Nigel Johnston}
+    \title{"Submarine Communication during Lightning Interference"\\ Final Year Project \\ XX40197}
+    % \titlepic{\includegraphics[width=0.5\textwidth]{figs/sim/carrier.png}}
+    \author{Candidate 13220
+    \\[0.5cm]
+    Supervisor: Martin Fullerkrug
+    \\[0.5cm] 
+    Assessor: Nigel Johnston}
     \date{\textit{May 2021}}
 \end{titlepage}
 
 
-\maketitle
 
-\setcounter{page}{0}
+\maketitle
+\renewcommand{\abstractname}{Summary}
+% \import{Sections/}{summary.tex}
+
+\pagestyle{empty}
 \tableofcontents
-\thispagestyle{empty}
+
+
 \newpage
 \pagenumbering{roman}
 \renewcommand{\thesection}{\Roman{section}}
 \addcontentsline{toc}{section}{List of Figures}
-\listofigures
+\listoffigures
+\pagestyle{fancy}
 \pagebreak
 \addcontentsline{toc}{section}{List of Tables}
 \listoftables
 \pagebreak
+
 \import{Sections/}{list_of_symbols.tex}
 \newpage
 \setcounter{section}{0}
@@ -83,16 +98,20 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 \renewcommand{\thesection}{\arabic{chapter}.\arabic{section}}
-% \setstretch{2.0}
-% \import{Sections/}{Introduction.tex}
-% \pagebreak
-% \import{Sections/}{LitReview.tex}
-% \pagebreak
-% \import{Sections/}{methods.tex}
-% \pagebreak
+% \setstretch{1.25}
+\import{Sections/}{Introduction.tex}
+\pagebreak
+\import{Sections/}{LitReview.tex}
+\pagebreak
+\import{Sections/}{methods.tex}
+\pagebreak
 \import{Sections/}{results.tex}
+\pagebreak
+\import{Sections/}{discussion.tex}
+\pagebreak
+% \import{Sections/}{conclusions.tex}
 \renewcommand{\bibname}{References}
+% \setstretch{1.0}
+\addcontentsline{toc}{chapter}{References}
 \bibliography{refs}
-
-\addcontentsline{toc}{section}{References}
 \end{document}
