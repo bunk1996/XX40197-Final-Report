@@ -9,7 +9,7 @@ The key objectives of this project are:
     \item To develop the necessary tools to process the raw recorded data and extract the demodulated baseband.
     \item Develop a software tool to generate an MSK waveform to allow for in depth investigation
     \item Using information extracted from the real recorded data develop a tool to simulate the atmospheric noise that appears in the real world signals.
-    \item Develop an algorithm that can extract the symbols from a demodulated MSK signal and attempt to recover the bits lost by lightning.
+    \item Develop an algorithm that can extract the symbols from a demodulated MSK signal and improve the BER using non-data related methods.
 \end{enumerate}
 
 The key aims are:
@@ -23,18 +23,20 @@ The key aims are:
 \section{Introduction to Methodology}
 The investigation in order to achieve the aims of this project will contain two principle components. 
 \begin{enumerate}
-    \item Simulation
+    \item \textbf{Simulation}
+    
     The purpose of this is to develop simulation tools that allow for the generation of MSK signals in a controlled environment, in order to best replicate signals in the real world where there is a known bit structure and noise content. In this instance the particular importance of them is that the original bit sequence is a known quantity compared to the data recordings where the bit sequence can only be estimated. 
     
-    \item Analysis
+    \item \textbf{Analysis}
+    
     This relates to the study and investigation of the signal characteristics. This analysis will be applied to both the real data and the simulation data. This will allow for objective performance metrics to be developed in order to assess the performance of algorithm.
 \end{enumerate}
 
 
 \section{Stage 1: Development of Understanding} 
-The importance of developing a good simulation tool is essential in order to help assess the performance of the final algorithm as there are a lot of unknowns regarding the real data the ability to be able to create like for like simulations with known quantities is essential.
+The importance of developing a good simulation tool is essential in order to help assess the performance of the final algorithm. There are a lot of unknowns regarding the real data, which limits the ability to accurately and reliably compare results. Therefore to be able to create like for like simulations with known quantities is essential.
 \\\\
-The first stage involves an investigation into the real recording already present. In order to develop an understanding of the real data in order to help validate the later stages. Particular techniques used include the the use of the Fast Fourier Transform which is the computationally efficient implementation of the Fourier Transfrom this is contained within scipy.
+The first stage involves an investigation into the real recording already present. In order to develop an understanding of the real data to help validate the later stages. Particular techniques used include the the use of the Fast Fourier Transform which is the computationally efficient implementation of the Fourier Transfrom.
 \\\\
 This stage involved the basic steps of signal receptions, and developing these software tools for use later on:
 
@@ -64,13 +66,12 @@ This stage involved the basic steps of signal receptions, and developing these s
     \item Demodulate
 
             It is important to remember that the carrier is phase modulated, therefore
-            we are interested in extracting the phase of the baseband signal. If we call baseband b(t) demodulation is shown by equations \ref{eq:instphase}
+            we are interested in extracting the phase of the baseband signal. If we call baseband b(t) demodulation is shown by equations \ref{eq:instphase}a,b and c.
             \begin{subequations}
                 \begin{equation}
-                    \angle b(t) = arctan\left(\frac{Im[b(t)}{Re[b(t)]}\right) = \phi
+                    \angle b(t) = arctan\left(\frac{Im[b(t)]}{Re[b(t)]}\right) = \phi
                 \end{equation}
                 \begin{multicols}{2}
-                
                 
                 \begin{equation}
                     \phi = \omega t = 2\pi f
@@ -83,7 +84,8 @@ This stage involved the basic steps of signal receptions, and developing these s
                 \end{multicols}
                 \label{eq:instphase}
             \end{subequations}
-            \item Important to note that the instantaneous phase will be in the range of $pi \rightarrow -pi$, therefore it is necessary to
+            Important to note that the instantaneous phase will be in the range of $pi \rightarrow -pi$, therefore it is necessary to unwrap the phase before differentiating it. This is the process of changing point where there is a jump greater than $\pi$ to the $2\pi 's $ complement. This prevents the large jumps from dominating the differential.
+        
         \end{enumerate}
 
 
@@ -137,18 +139,19 @@ Following on from the generation of a suitable carrier signal it needs to be cor
 \end{equation}
 
 A discrete PDF can be developed by creating a histogram from this data using numpy's histogram method. This method uses the maximum of the Sturges or the Friedman-Diaconis method in order to determine bin number and width\footnote{\hyperlink{https://numpy.org/doc/stable/reference/generated/numpy.histogram.html}{https://numpy.org/doc/stable/reference/generated/numpy.histogram.html}}.
-This histogram corresponds to the APD for the signal. By normalising the histogram so the histogram a cumulative distribution function can be created in order to predict an amplitude. Once a CDF has been created, by generating a random probability an absolute amplitude value can be extracted from the CDF.
+This histogram corresponds to the APD for the signal. Normalising the histogram to a unit interval allows the creating of a cumulative distribution function. Once a CDF has been created, by generating a random probability an absolute amplitude value can be extracted from the CDF.
 
 ??? Gaussian Noise ???
 \section{Stage 3: Algorithm Development}
-Following on from the successful development of a simulation tool. The development of an algorithm to ultimately extract the symbols from the real signal, developed and tested using the simulated waveforms.
-
+Following on from the successful development of a simulation tool the next stage is the development of an algorithm. The purpose of this is to ultimately extract the symbols from the real signal, which is developed and tested using the simulated waveforms.
+\\
 The principle of the algorithm is based on several known conditions. The process of downconversion makes the carrier frequency of the signal zero leaving only the modulating waveform. The range of the instantaneous frequency for this waveform can be used to determine the bandwidth of the signal and in turn the time per symbol $T_b$, from this the approximate number of symbols can be estimated. A symbol change ie 1 to -1 or vice versa will be observed by the signal crossing the zero axis. Using the time difference in between zero crossing the number of symbols in that interval can be determined. 
 
 \section{Stage 4: Testing and Evaluation}
-The final stage of the investigation is to combine the developed tools in order to investigate the performance of the developed algorithm. The aims of this is to assess the breakdown point of the algorithm by simulating different scenarios with different types of noise. Analyse the cause of breakdown and see if further mitigation is possible.
+The final stage of the investigation is to combine the developed tools in order to investigate the performance of the developed algorithm. The aims of this is to assess the breakdown point of the algorithm by simulating different scenarios with different types of noise. Using each of these scenarios the breakdown points can be analysed alongisde the signal characteristics in order to develop a strategy to mitigate against bit loss.
 \subsection{Investigations}\label{sec:investigations}
-Several investigations need to be carried out in order to assess the limitations of symbol recovery. The main judge of this is the BER as previously mentioned is the number of incorrectly estimated symbols per transmission. This is shown by equation \ref{eq:ber}. This is a simple exercise when using simulated signals as the initial message and received message are known so it it a simple comparison exercise. However for the real data the extracted bits are known and the expected total number of bits can be calculated, the original transmitted however is not known. An estimate of the BER can be recreated by looking at the net displacement of the phase can be used, because for a 1 the phase has a positive gradient and for a 0 the phase has a negative gradient. If the final displacement is positive then there are more 1's if the final displacement is negative then there are more 0's in the message, finally if it is zero then there are equal 1's and 0's. The difference in No. of bits can be calculated using equation \ref{eq:delSym}. Then using equations \ref{eq:Nbits}, \ref{eq:N1s} and \ref{eq:N0s}, the quantities of each symbol can be estimated. Then the No. of incorrect bits present can be determined by using either equation \ref{eq:errbit1} or \ref{eq:errbit0}. This method is purely developed to provide an estimate of BER within the real signal. The big assumption that it makes is that the final recording made is at a point in the time series where there is no noise and therefore the phase at the point represents the phase displacement of the transmitter phasor. A further assumption is that after a lightning event the signal returns to that of the transmitter. Additionally it is very much an estimate as two errors on opposite symbols cancel each other out. This limitation is the driving reason why this metric is a useful reference but it is not robust enough to quantify the performance of any bit recovery algorithm. 
+Several investigations need to be carried out in order to assess the limitations of symbol recovery. The main judge of this is the BER as previously mentioned is the number of incorrectly estimated symbols per transmission. This is shown by equation \ref{eq:ber}. This is a simple exercise when using simulated signals as the initial message and received message are known so it is a simple comparison exercise. However for the real data the extracted bits are known and the expected total number of bits can be calculated, the original transmitted however is not known. An estimate of the BER can be calculated by looking at the net displacement of the phase can be used, because for a 1 the phase has a positive gradient and for a 0 the phase has a negative gradient. If the final displacement is positive then there are more 1's if the final displacement is negative then there are more 0's in the message, finally if it is zero then there are equal 1's and 0's. The difference in number of bits can be calculated using equation \ref{eq:delSym}. Then using equations \ref{eq:Nbits}, \ref{eq:N1s} and \ref{eq:N0s}, the quantities of each symbol can be estimated. Then the No. of incorrect bits present can be determined by using either equation \ref{eq:errbit1} or \ref{eq:errbit0}. This method is purely developed to provide an estimate of BER within the real signal. The big assumption that it makes is that the final recording made is at a point in the time series where there is no noise and therefore the phase at the point represents the phase displacement of the transmitter phasor. A further assumption is that after a lightning event the signal returns to that of the transmitter. Additionally it is very much an estimate as two errors on opposite symbols cancel each other out. This limitation is the driving reason why this metric is a useful reference but it is not robust enough to quantify the performance of any bit recovery algorithm. 
+
 \begin{multicols}{2}
 \begin{equation}
     \text{BER} = \frac{\text{Incorrect No. Bits}}{\text{Total No. Bits}}
@@ -156,7 +159,7 @@ Several investigations need to be carried out in order to assess the limitations
 \end{equation}
 \begin{subequations}
 \begin{equation}
-    N_{\text{bits}} = \frac{T_{\text{total}}}{T_{\text{bit}}}
+    N_{\text{bits}} = \frac{T_{\text{total}}}{T_{\text{b}}}
     \label{eq:Nbits}
 \end{equation}
 \begin{equation}
@@ -179,9 +182,10 @@ Several investigations need to be carried out in order to assess the limitations
     \text{Incorrect Bits} = \text{N}_{\text{0's-Estimated}} - \text{N}_{\text{0's-Extracted}}
     \label{eq:errbit0}
 \end{equation}
+\label{eq:berEst}
 \end{subequations}
 \end{multicols}
-In order to assess the absolute performance of the symbol recovery algorithm including it's limitations, noise level need to be quantified. This is done using the signal to noise ratio, defined by equation \ref{eq:snr}, where P represents power. In addtion to this when assessing frequency modulation methods energy density per bit per power spectral density can be used. This is defined by equation \ref{eq:ebN01}, where $f_b$ is the bitrate.
+In order to assess the absolute performance of the symbol recovery algorithm including it's limitations, noise level needs to be quantified. This is done using the signal to noise ratio, defined by equation \ref{eq:snr}, where P represents power. In addtion to this when assessing frequency modulation methods energy density per bit per power spectral density can be used. This is defined by equation \ref{eq:ebN01}, where $f_b$ is the bitrate.
 \begin{multicols}{2}
 \begin{subequations}
 \begin{equation}
@@ -202,7 +206,7 @@ In order to assess the absolute performance of the symbol recovery algorithm inc
         \label{eq:ebN01}
 \end{equation}
 \end{multicols}
-Regarding the simulated signal noise power is easy to estimate as you subtract the power of the carrier away from the power of the noise corrupted signal. However in order to estimate the SNR of the real recorded data it is necessary to make an estimate of the noise. In statistical terms the noise can be thought of as the outliers of the data. We can define the outliers as all points that lie outside of the range of the data. Equations \ref{eq:Q1} and \ref{eq:q3} are used to calculate the \nth{25} and \nth{75} percentile of the data. The interquartile range (IQR) is the difference between the two shown by equation \ref{eq:iqr}, this is a widely used method to assess the spread of data that is not normally distributed as is clearly established in the literature signals within this band are not. Working on the assumption that the amplitude of the transmitter should represent a grouping, therefore it can be deduced that any amplitude values outside this grouping can be considered noise. This grouping is defined as all the values that sit inbetween an upper and lower limit.
+Regarding the simulated signal noise power is easy to estimate as you subtract the power of the carrier away from the power of the noise corrupted signal. However in order to estimate the SNR of the real recorded data it is necessary to make an estimate of the noise. In statistical terms the noise can be thought of as the outliers of the data. We can define the outliers as all points that lie outside of the range of the data. Equations \ref{eq:Q1} and \ref{eq:q3} are used to calculate the \nth{25} and \nth{75} percentile of the data. The interquartile range (IQR) is the difference between the two shown by equation \ref{eq:iqr}, this is a widely used method to assess the spread of data that is not normally distributed. It is clearly established in the literature signals within this band are not. Working on the assumption that the amplitude of the transmitter should represent a grouping, it can be deduced that any amplitude values outside this grouping can be considered noise. This grouping is defined as all the values that sit inbetween an upper and lower limit.
 The range limits are then determined by equations \ref{eq:upplim} and \ref{eq:lowlim}. Any data that lies outside these points is then considered noise. This statistical analysis is applied to the absolute amplitude of the complex sinusoid received.
 
 \begin{multicols}{2}
@@ -233,7 +237,7 @@ The range limits are then determined by equations \ref{eq:upplim} and \ref{eq:lo
     \end{equation}
 \end{subequations}
 \end{multicols}
-Using the calculated limits. The noise signal can then be estimated using equation \ref{eq:noiseest}, hence the power can be calculated using equation \ref{eq:pnoise}, take note that the noise power calculated over the entire length of the original signal. 
+Using the calculated limits. The noise signal can then be estimated using equation \ref{eq:noiseest}. The power can be calculated using equation \ref{eq:pnoise}, take note that the noise power is calculated over the entire length of the original signal. 
 
 \begin{multicols}{2}
 \begin{subequations}
@@ -248,7 +252,7 @@ Using the calculated limits. The noise signal can then be estimated using equati
 \end{subequations}
 \end{multicols}
 
-\section{Assumptions}
+\subsection{Assumptions}
 \begin{enumerate}
     \item The algorithm is implemented on a signal irrespective of phase synchronisation.
     \item All noise generated will be a complex number as a result of an absolute amplitude and a random phase

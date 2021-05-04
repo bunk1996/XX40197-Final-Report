@@ -1,6 +1,6 @@
 \chapter{Results and Analysis}
 \section{Signal Characteristics}\label{sec:sigChar}
-In order to understand the nature of the problem there was requirment for pre-analysis of data. The primary dataset used is 2 seconds of electric field recordings, from a particular instance of exceedingly high lightning activity. This raw data was recorded with a sampling frequency $f_s = 1\si{\mega\hertz}$. These are broadband recordings, the time series is shown by Figure \ref{fig:realData} and the frequency spectrum of the recording is shown by the Figure \ref{fig:realFFT} shows that they cover the band of 0-300\si{\kilo\hertz}. The large spike at 198kHz is Radio 4's long wave service, this is an AM transmission hence it needs to have a very large amplitude to avoid background interference. Unlike the VLF signals we are interested in which are phase/frequency modulated, therefore the transmitted power lower.
+In order to understand the nature of the problem there was requirement for pre-analysis of data. The primary dataset used is 2 seconds of electric field recordings, from a particular instance of exceedingly high lightning activity. This raw data was recorded with a sampling frequency $f_s = 1\si{\mega\hertz}$. These are broadband recordings, the time series is shown by Figure \ref{fig:realData} and the frequency spectrum of the recording is shown by the Figure \ref{fig:realFFT} shows that they cover the band of 0-300\si{\kilo\hertz}. The large spike at 198kHz is Radio 4's long wave service, this is an AM transmission hence it needs to have a very large amplitude to avoid background interference. Unlike the VLF signals we are interested in which are phase/frequency modulated, therefore the transmitted power lower.
 
 
 \begin{figure}[h!]
@@ -11,14 +11,13 @@ In order to understand the nature of the problem there was requirment for pre-an
         \label{fig:realData}
     \end{subfigure}
     \begin{subfigure}[b]{0.5\textwidth}
-    `   \centering
+        \centering
         \includegraphics[width = \textwidth]{figs/sig_character/fft_data.png}
         \caption{FFT}
         \label{fig:realFFT}
     \end{subfigure}
     \caption{Unfiltered Real Data}
 \end{figure}
-
 
 
 Figure \ref{fig:vlfspect} is a spectrogram showing the band of interest to this problem and effectively represents the problem space. It can be seen in this plot that the vertical lines represent active transmitters of which there are five. The horizontal lines represent interference events. Figure \ref{fig:transSpect} shows the more localised contained the centre frequencies of the transmitters visible. This clearly illustrates the impulsive nature of noise, in this plot there are 4 visible impulses, the cause of which is the electromagnetic radiation produced by a lightning event. 
@@ -36,7 +35,7 @@ Figure \ref{fig:vlfspect} is a spectrogram showing the band of interest to this 
         \label{fig:transSpect}
 \end{figure}
 
-Figure \ref{fig:absAmplitude} shows the absolute amplitude of the five active transmitters that are in the recorded dataset. Additionally as described in section \ref{sec:investigations} the plots also show the limits used for noise bounding in order to estimate the noise signal for this example. $k=1.5$ has been used in order to set this limit. These properties are then used to calculate the noise signal and then in turn estimate to the Signal to Noise ratio. This estimate is calculated and shown by table \ref{tab:snr1}. By referring back to figure \ref{fig:transSpect} in addition to the amplitude plots, the spikier the plots are can justify the inference that there is much more interference present in the signal. 
+Figure \ref{fig:absAmplitude} shows the absolute amplitude of the five active transmitters that are in the recorded dataset. Additionally as described in section \ref{sec:investigations} the plots also show the limits used for noise bounding in order to estimate the noise signal for this example. Using equation \ref{eq:lowlim} and \ref{eq:upplim}, $k=1.5$ has been used in order to set the noise threshold for each signal. These properties are then used to calculate the noise signal and then in turn estimate to the Signal to Noise ratio. This estimate is calculated and shown by table \ref{tab:snr1}, the values in this table are calculated using the methodology equations \ref{eq:pnoise} and \ref{eq:snr}. By referring back to figure \ref{fig:transSpect} in addition to the amplitude plots, the spikier the plots are can justify the inference that there is much more interference present in the signal. 
 
 \begin{figure}[h!]
     \centering
@@ -60,7 +59,7 @@ Figure \ref{fig:absAmplitude} shows the absolute amplitude of the five active tr
 \label{tab:snr1}
 \end{table}
 
-Figure \ref{fig:gqd3d} shows the complex sinusoid received for the transmitter GQD. Although it is clearly corrupted by noise however the cylindrical shape represents the transmitter, where the signal deviates from this core 'cylinder', which ultimately represents the phasor of the transmitter, is as a result of atmospheric noise. 
+Figure \ref{fig:gqd3d} shows the complex sinusoid received for the transmitter GQD. Although it is clearly corrupted by noise the cylindrical shape represents the transmitter, where the signal deviates from this core 'cylinder'. Which ultimately represents the phasor of the transmitter, is as a result of atmospheric noise. 
 
 \begin{figure}[h!]
     \centering
@@ -70,10 +69,10 @@ Figure \ref{fig:gqd3d} shows the complex sinusoid received for the transmitter G
 \end{figure}
 
 
-Appendix X contains the figures related to the demodulated signals for each transmitter, as it is clear that MSK is used as the modulation technique illustrated by the constant frequency for each symbol, the gradient changes sign when the symbol changes. This represent a zero crossing in the first differential which corresponds to the instantaneous frequency. In all instances the passband of the orignal data has been $f_c \pm 400Hz$
+Appendix A contains the figures related to the demodulated signals for each transmitter, as it is clear that MSK is used as the modulation technique illustrated by the constant frequency for each symbol, the gradient changes sign when the symbol changes. This represent a zero crossing in the first differential which corresponds to the instantaneous frequency. In all instances the passband of the original data has been $f_c \pm 200Hz$
 
 \subsection{Noise Estimation}\label{sec:noiseEst}
-As a key part of the investigation is to simulate the noise present in these VLF signals, it is important to accurately estimate the noise. As previously mentioned the aim is to this statistically by defining the noise as outliers within the data. Figure \ref{fig:noise estimate} shows the results of estimating the noise. By inspection it is clear that the noise is not consistent between all the transmitters, the most likely explanation of this is clipping in the data acquisition unit used to record the data. The restricts the maximum value to roughly 0.5 \si{\volt \per\metre}, as a result at the maximum values shown there is a local rectangular waveform. In the frequency domain this results in a sinc function. The result of this is that certain frequencies will result in a minimum and other in a maximum. This is clearly visible at 1.0\si{\second} where there is clearly a lightning event, because lightning events are broadband this event should be visible at all frequencies as is shown by some of the other less powerful spikes also present. That are the same across all the transmitters. The clipping instance at 1.0\si{\second} is shown by figure \ref{fig:clipping}, where the signal apparently takes on a rectangular characteristic which we know is not that case.
+As a key part of the investigation is to simulate the noise present in these VLF signals, it is important to accurately estimate the noise. As previously mentioned the aim is to do this statistically by defining the noise as outliers within the data. Figure \ref{fig:noise estimate} shows the results of estimating the noise. By inspection it is clear that the noise is not consistent between all the transmitters, the most likely explanation of this is clipping in the data acquisition unit used to record the data. The restricts the maximum value to roughly 0.5 \si{\volt \per\metre}, as a result at the maximum values shown there is a local rectangular waveform. In the frequency domain this results in a sinc function. The result of this is that certain frequencies will result in a minimum and other in a maximum. This is visible at 1.0\si{\second} where there it can be inferred there is a lightning event, because lightning events are broadband this event should be visible at all frequencies as is shown by some of the other less powerful spikes also present. That are the same across all the transmitters. The clipping instance at 1.0\si{\second} is shown by figure \ref{fig:clipping}, where the signal apparently takes on a rectangular characteristic which we know is not that case.
 
 \begin{figure}[h!]
     \centering
@@ -92,31 +91,18 @@ As a key part of the investigation is to simulate the noise present in these VLF
 The final thing to take from the figure \ref{fig:noise estimate} is that there are clearly two types of noise generated from different parts of the lightning event. These can be broadly characterised into two types of noise.
 \begin{itemize}
     \item High Amplitude noise: This is a result of the return stroke, it is characterised by a large amplitude and has a duration in the order $10^{-6}\si{\second}$ 
-    \item Intensive noise: This is characteristic of the continuous current, it generally has a lower amplitude but a longer duration to the order of $10^{-3}\si{\second}$
+    \item Continuing noise: This is characteristic of the continuous current, it generally has a lower amplitude but a longer duration to the order of $10^{-3}\si{\second}$
 
 \end{itemize}
 
 \pagebreak
 \section{Simulation}
 \subsection{Control Signal}
-The development of a successful simulation was key in order to assess the problem as previously explained the MSK signal consists of an inphase and quadrature component, these are cosine and sine waves amplitude modulated with the pulse shaped baseband signal. This is shown by figure \ref{fig:carrier}, which shows these signals. The algorithm that converts the message signal to baseband is shown by listing \ref{lst:algorithm}
-\begin{lstlisting}[language = python, captionpos=b, caption = Algorithm to create Correct signs for $a_{i}$ and $a_{q}$, label = lst:algorithm]
-    for i in range(0,L-2):
-        if i%2 == 0:
-            if msgl[i] == msgl[i+1]:
-                a = np.append(a, a[int(i/2)])
-            elif msgl[i] != msgl[i+1]:
-                a = np.append(a, a[int(i/2)]*-1)
-        else:
-            if msgl[i] == msgl[i+1]:
-                b=np.append(b, b[int(np.floor(i/2))])
-            elif msgl[i] != msgl[i+1]:
-                b = np.append(b, b[int(np.floor(i/2))]*-1)
-\end{lstlisting}
-They are then combined in order to create the final signal that is suitable for transmission. The final complex waveform is shown by figure \ref{fig:3DBB}, where the symbol switch point can be seen. The baseband frequency is determined by the bitrate, which is $f_{1bb} = \frac{1}{T_b}$. This means that in theory there is potential for a bit change everytime there is an axis crossing, in reality this is eight points where the direction of the phasor can change either side of the axis, depending on which direction the phasor is moving depends on which one of these points it will switch. The rotating phasor is defined as $Z_{n}$ shown in equation \ref{eq:phasor}. These results have been simulated with a centre frequency of 22.1kHz and are to illustrate proof of concept for the simulation tools.
+The development of a successful simulation was key in order to assess the problem as previously explained the MSK signal consists of an inphase and quadrature component, these are cosine and sine waves amplitude modulated with the pulse shaped baseband signal. This is shown by figure \ref{fig:carrier}, which shows these signals. 
+They are then combined in order to create the final signal that is suitable for transmission. The final complex waveform is shown by figure \ref{fig:3DBB}, where the symbol switch point can be seen. The baseband frequency is determined by the bitrate, which is $f_{1bb} = \frac{1}{T_b}$. This means in theory there is potential for a bit change everytime there is an axis crossing or the phasor has displaced $\frac{\pi}{2}$. In reality there are eight points where the direction of the phasor can change either side of the axis, depending on which direction the phasor is moving depends on which one of these points it will switch. The rotating phasor is defined as $Z_{n}$ shown in equation \ref{eq:phasor}. These results have been simulated with a centre frequency of 22.1kHz and are to illustrate proof of concept for the simulation tools.
 
 \begin{equation}
-    Z_n = e^{2\pi f_{BW}t}
+    Z_n = e^{2\pi f_{c}tj}
     \label{eq:phasor}
 \end{equation}
 
@@ -153,11 +139,11 @@ In order to allow the simulation to most accurately represent the real world sit
     \label{fig:apdcdf}
 \end{figure}
 
-In order to match the noise signature from the recorded data, a random amplitude is selected and then combined with a random phase in order to create a complex point to be added to the signal. These points are added in bursts of 500 - 10000 samples which is 500\si{\nano\second} to 20\si{\milli\second}, with $n$ bursts in each signal. This is to represent the two different natures of previously established interference.
+In order to match the noise signature from the recorded data, a random amplitude is selected and then combined with a random phase in order to create a complex point to be added to the signal. These points are added in bursts of 500 - 10000 samples which is 500\si{\micro\second} to 10\si{\milli\second}, with $n$ bursts in each signal. This is to represent the two different natures of previously established interference.
 
 \pagebreak
 \subsection{Validation}
-The full simulation involved combining the ideal simulated waveform with a simulated noise waveform. The time series is shown by figure \ref{fig:timeseries} and the demodulated signal is shown by figure \ref{fig:fullsimDemod}. This particular example illustrates an attempt to simulate the transmitter GQD, this has been chosen as it has the lowest SNR. Comparing the recovered baseband signal to figure \ref{fig:AnthornDemod} it can be shown on the surface to exhibit similar properties and an SNR of -4dB. The simulation represents a random bit sequence and a gain on the APD value for additive noise of 5 for burst greater than 5000 samples and 10 for bursts less than 5000 samples.
+The full simulation involved combining the ideal simulated waveform with a simulated noise waveform. The the demodulated signal is shown by figure \ref{fig:fullsimDemod}. This particular example illustrates an attempt to simulate the transmitter GQD, this has been chosen as it has the lowest SNR. Comparing the recovered baseband signal to figure \ref{fig:AnthornDemod} it can be shown on the surface to exhibit similar properties and an SNR of -4dB. The simulation represents a random bit sequence and a gain on the APD value for additive noise of 5 for burst greater than 5000 samples and 10 for bursts less than 5000 samples.
 
 Figure \ref{fig:polar} shows these signals in the complex plane, as there is a certain stochastic nature to lightning interference. However these three plots do illustrate how the lightning effects the points at which the symbols changes in reality, and how the lightning effects how the symbols are detected. As it pulls away from the phasor and then returns.
 
@@ -174,7 +160,7 @@ Figure \ref{fig:polar} shows these signals in the complex plane, as there is a c
     \caption{\centering Instantaneous Phase and Frequency for simulated GQD}
     \label{fig:fullsimDemod}
 \end{figure}
-\begin{figure}[H]
+\begin{figure}[h!]
     \centering
     \begin{subfigure}[b]{0.4\textwidth}
         \centering
@@ -199,16 +185,16 @@ Figure \ref{fig:polar} shows these signals in the complex plane, as there is a c
 \end{figure}
 
 
-\pagebreak
+\newpage
 \section{Symbol Recovery}
 Following on from an intensive investigation which is summarised in section \ref{sec:sigChar}. Two possible methodologies were identified to recover the message symbols from the received signal.
 
 \begin{itemize}
     \item Image based: Using narrowband Spectrograms in order to develop an image recognition tool to recover the original bits.
-    \item Geometric: Effectively a graph based system using known properties of the carrier wave in order to estimate the symbols based of the instantaneous phase and frequency.
+    \item Differential: Application of calculus to the baseband signal in order to estimate the symbols based off the instantaneous phase and frequency.
 \end{itemize}
 
-Although there are significantly powerful image processing tools that may be able to help with this problem broadband interference can have a significant effect on spectrograms and then the quality of the image becomes limited twofold. Firstly a key factor can be that the color map may not contain sufficient colors to allow the lightning to be discriminated and secondly depending on what is surrounding the transmitter the signal processing uncertainty principal comes into play, meaning that a compromise of either time or frequency resolution is required. This is exemplified by figure \ref{fig:gqdspect} as although the frequency changes are clear the two limiting factors are overwhelming clear, firstly because the time resolution is greater than $T_b$ for a signal with 200Hz bandwidth there will not be enough discrete symbols visible. Secondly because the power of the lightning impulse is much greater than the power of the transmitter the lightning event will in all effect blank out each time interval that it is present in. As good practice tends to use a sampling frequency an order of magnitude greater than the frequency of interest, therefore for this particular example the signal could be downsampled to 250\si{\kilo\hertz}, which would allow for an improved time resolution. Equally this could be achieved by using shorter sample sizes for the spectrogram.
+Although there are significantly powerful image processing tools that may be able to help with this problem broadband interference can have a significant effect on spectrograms and then the quality of the image becomes limited twofold. Firstly a key factor can be that the color map may not contain sufficient colors to allow the lightning to be discriminated and secondly depending on what is surrounding the transmitter the signal processing uncertainty principal comes into play, meaning that a compromise of either time or frequency resolution is required. This is exemplified by figure \ref{fig:gqdspect} as although the frequency changes are visible the two limiting factors are overwhelming clear, firstly because the time resolution is greater than $T_b$ for a signal with 200Hz bandwidth there will not be enough discrete symbols visible. Secondly because the power of the lightning impulse is much greater than the power of the transmitter the lightning event will in all effect blank out each time interval that it is present in. In this instance this is not a feasible method due to the signal processing uncertainty principle, which leads to a very large frequency resolution in order to identify the bits. The only alternative would be to use higher sampling frequencies although this can have cost implications. For these reasons this method has not been pursued any further.
 
 \begin{figure}[h!]
     \centering
@@ -219,19 +205,28 @@ Although there are significantly powerful image processing tools that may be abl
 
 \subsection{Algorithm Design}
 
-The basis to go for essentially a graphical approach using the principles of the differential of the phase is considered optimal, especially for the example data because it is recorded with such a small time resolution this can be utilised. As there are known quantities that can be extracted from the signal. The basic algorithm works simply on differentials. The Instantaneous Phase is an integrated measurement equivalent to displacement, because the frequency changes direction everytime there is a symbol change this represents a turning point in the phase. The first differential of the phase is frequency and hence a crossing of the zero axis will occur. This symbol change of the instantaneous frequency is the basis of the extraction algorithm. From a received signal it is possible to calculate the transmission bandwidth from the variation in instantaneous frequencies. Referring again to Appendix X the information shown in table \ref{tab:transinfo} can be inferred in particular the bandwidth from which $T_b$ can be calculated using equation \ref{eq:tb}. By combining with the $f_s$ using equation \ref{eq:Ns} which calculates the number of samples per symbol. 
+The basis to go for essentially a graphical approach using the principles of the differential of the phase is considered optimal, especially for the example data because it is recorded with such a small time resolution this can be utilised. As there are known quantities that can be extracted from the signal. 
 
+
+
+The basic algorithm works simply on differentials. The Instantaneous Phase is an integrated measurement equivalent to displacement, because the frequency changes direction everytime there is a symbol change this represents a turning point in the phase. The first differential of the phase is frequency and hence a crossing of the zero axis will occur. This symbol change of the instantaneous frequency is the basis of the extraction algorithm. From a received signal it is possible to calculate the transmission bandwidth from the variation in instantaneous frequencies. Referring again to Appendix A the information shown in table \ref{tab:transinfo} can be inferred from the demodulated signals because the extremes of the instantaneous frequency will be $\pm \frac{\Delta f}{2}$, therefore using equation \ref{eq:fdev} the bandwidth of the signal can be estimated. $T_b$ can be calculated using equation \ref{eq:tb}. By combining with the $f_s$ using equation \ref{eq:Ns} which calculates the number of samples per symbol. 
+
+\begin{multicols}{3}
 \begin{subequations}
 \begin{equation}
-    T_b = 1/BW
+    \Delta f = \frac{BW}{2}
+    \label{eq:fdev}
+\end{equation}
+\begin{equation}
+    T_b = \frac{1}{BW}
     \label{eq:tb}
 \end{equation}
 \begin{equation}
-    N_s = f_S \times T_b
+    N_s = f_sT_b
     \label{eq:Ns}
 \end{equation}
 \end{subequations}
-
+\end{multicols}
 \begin{table}[h!]
     \centering
     \begin{tabular}{l|l|c|c}
@@ -259,23 +254,21 @@ For an ideal coherent signal these crossing of the time axis should occur an int
 
 \subsubsection{Algorithm}
 \begin{enumerate}
-    \item Find all crossings of the time axis in the instantaneous frequency using a sign change technique. Recording the index of each crossing.
+    \item Find all crossings of the time axis in the instantaneous frequency using a sign change technique. Record the index of each crossing.
     \item Iterate through all indexes, calculate the time difference between each index to determine if it is long enough for a symbol. A threshold may be applied for example: $\Delta t > 0.8T_b$.
     \item Check the gradient of the crossing at the index:
     \begin{itemize}
         \item Positive Gradient is a transition of 0 to 1.
         \item Negative Gradient is a transition of 1 to 0.
     \end{itemize}
-    \item The number of symbols for the given interval is given by equation \ref{eq:nbits}.
+    \item The number of symbols for the given interval is given by equation \ref{eq:nbits}. 
     \begin{equation}
-        N_{\text{bits}} = \frac{\Delta t}{N_s}
+        N_{\text{bits}} = \frac{\Delta t}{T_b} = \frac{\Delta n}{N_s}
         \label{eq:nbits}
     \end{equation}
     \item At each instance compare the number of bits compiled against the elapsed time and if necessary insert additional bits to ensure that the extracted signal has the correct number of elements.
     \item After the last crossing calculate the sign of the last sequence and apply equation \ref{eq:nbits}.
 \end{enumerate}
-
-
 
 
 \subsection{Application to Real Signal}
@@ -294,9 +287,9 @@ For an ideal coherent signal these crossing of the time axis should occur an int
     \label{tab:BER Real}
 \end{table}
 
-In it's most basic form the results of this algorithm when applied to the 5 signals in the noisy data are shown by table \ref{tab:BER Real}. Figure \ref{fig:snrwins} shows these values plotted against the respective SNR for each transmitter, with a crude best fit line plotted to show the trend. The DHO transmitter was eliminated from this calculation because it is clearly a data outlier, this is likely because the SNR calculation is not accurate in this instance. A likely reason for this referring back to section \ref{sec:sigChar} is that due to the clipping in the data acquistion there appears to be less noise present in this signal. However the bit loss associated with this signal suggests otherwise. 
+In it's most basic form the results of this algorithm when applied to the 5 signals in the noisy data are shown by table \ref{tab:BER Real}, using the estimation technique described in section \ref{sec:investigations} by the equations \ref{eq:berEst}(a-f). Figure \ref{fig:snrwins} shows these values plotted against the respective SNR for each transmitter, with a crude best fit line plotted to show the trend. The DHO transmitter was eliminated from this calculation because it is clearly a data outlier, this is likely because the SNR calculation is not accurate in this instance. A likely reason for this referring back to section \ref{sec:sigChar} is that due to the clipping in the data acquisition there appears to be less noise present in this signal. However the bit loss associated with this signal suggests otherwise. 
 
-It is important to also note that because these signal contain 400 bits each with the exception of GZQ which has half the bandwidth so therefore only transmits 200 bits. Any BER value less than $10^{-6}$ for this number of bits corresponds to complete recovery of the original signal.
+It is important to also note that because these signal contain 400 bits each with the exception of GZQ which has half the bandwidth so therefore only transmits 200 bits. Any BER value less than $e^{-6}$ for this number of bits corresponds to complete recovery of the original signal.
 
 Comparing against figure \ref{snr:charmy} which as previously mentioned has a minimal noise content. This signal only contain four active transmitters however all four transmitters are achieving full bit recovery.
 
@@ -316,7 +309,7 @@ Comparing against figure \ref{snr:charmy} which as previously mentioned has a mi
     \caption{}
 \end{figure}
 \pagebreak
-\subsection{Application to Simulated Signals}
+\subsection{Application to Simulated Signals}\label{sec:simsignals}
 
 Table \ref{tab:simresults1} shows the results of three random simulations for 4 of the 5 transmitters present. DHO has not been simulated because the quality of the data for this transmitter appears to differ from expected values. The BER shown represent a bit loss of between 1 and 4 over the total length of the signal.
 
@@ -339,10 +332,10 @@ NAA      & 24                     & -31.0  & $e^{-4.89}$ & -28.6  & $e^{-4.61}$ 
 \end{table}
 
 Figure \ref{fig:noisefreq} shows the results of demodulation for an ideal MSK signal that has been corrupted by noise based off the transmitter at 19.6 kHZ. The noise signal in question is shown in figure \ref{fig:noiseamp}. In both figures the points where there is a missed transition is illustrated, by looking at the noise signal it is clear that the transitions occur at the end of a lightning event shown by the amplitude pulses. 
-
-This is where the slight randomness of the problem is highlighted. This simulation contains 20 'lightning' pulses however there are only 3 missing bit transitions, there are however the correct number of bits in the signal. This is likely due to lightning event introducing a resultant phase at an obtuse angle relative the phase of the transmitter which results in an apparent symbol change. Depending on where the error often occurs at a transition point close to the edge of a burst. 
-
-Because of how the algorithm iterates through the data and that the effect of the noise may move the zero crossing. At each crossing the algorithm checks that it has the correct number of bits for the elapsed time. As a result if the lightning creates an instantaneous phase within $0.8T_b$ of an actual crossing then this may result in a sequence being shortened and an additional bits being added at the next crossing due to the apparently longer interval between crossings. 
+\\
+This is where the slight randomness of the problem is highlighted. This simulation contains 20 'lightning' pulses however there are only 3 missing bit transitions, there are however the correct number of bits in the signal. This is likely due to lightning event introducing a resultant phase at an obtuse angle relative the phase of the transmitter which results in an apparent symbol change. Often this error is caused by the signal phasor returning to the carrier phasor, causing a sudden change in the phase, this can result in high frequency elements appearing in the differential. Which ideally should only be present when there is a symbol change.  
+\\
+Because of how the algorithm iterates through the data and that the effect of the noise may move the zero crossing. At each crossing the algorithm checks that it has the correct number of bits for the elapsed time. As a result if the lightning creates a change in the instantaneous phase within $0.8T_b$ of an actual crossing then this may result in a sequence being shortened and additional bits being added at the next crossing due to the apparently longer interval between crossings. 
 
 An additional error is missing a single symbol change within a long sequence of one symbol.
 
@@ -394,7 +387,9 @@ This metric although allows for further discrimination, it relies some form of p
 
 \pagebreak
 \subsubsection{Median Methods}
-Figure \ref{fig:medgrad} shows the relationship between error and the median gradient of the phase between two points. As previously established for an MSK transmission the gradient should be equal to $\pm\frac{BW}{4}[Hz]$, in reality this value will be slightly less because of the shallower gradient surrounding the turning points. Despite this however for the ideal signal there clear groupings of the frequency values for the gradients in between each symbol transition. For the noise corrupted signal there is a much more variation away from these point with errors occurring at points where the median instantaneous frequency falls outside of these trends. Again as previously mentioned although the from this data a consistent cause of error is not obvious.
+Figure \ref{fig:medgrad} shows the relationship between error and the median gradient of the phase between two points. As previously established for an MSK transmission the gradient should be equal to $\pm\frac{BW}{4}[Hz]$, in reality this value will be slightly less because of the shallower gradient surrounding the turning points. Despite this however for the ideal signal there clear groupings of the frequency values for the gradients in between each symbol transition.
+\\\\
+The noise corrupted signal shows much more deviation away from the expected values, at the points where the value is not as expected. A bit error is more likely to occur, although this is still a broad indicator as a bit error does not occur at all instances. For the noise corrupted signal there is a much more variation away from these point with errors occurring at points where the median instantaneous frequency falls outside of these trends. Again as previously mentioned although the from this data a consistent cause of error is not obvious.
 
 \begin{figure}[h!]
     \centering
@@ -403,3 +398,33 @@ Figure \ref{fig:medgrad} shows the relationship between error and the median gra
     \label{fig:medgrad}
 \end{figure}
 
+
+\pagebreak
+\subsubsection{Application}
+
+Figure \ref{fig:thresholding} shows the resulting points when the two metrics are used to threshold the data and then plotting against the detected bits. This shows the only two bits that were lost in this particular example, the bit error shown represents the location where in the original message the error has occurred. Due to the detection technique there is a threshold of $\Delta t \geq 0.85T_b$ which means that the transitions don't always align. The important result of this graph is that each bit error is proceeded with in less than one bit time by a thresholding result.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width = \textwidth]{figs/error/Thresholding.png}
+    \caption{Sample of Instantaneous Phase showing area of bit loss}
+    \label{fig:thresholding}
+\end{figure}
+
+As each instance where the two metrics stated above coincide is potentially an error point, a mitigation strategy is as follows. For each point in common, replace the phase with a straight line of with duration $\frac{T_b}{2}$, with the point of interest in the middle of the line. The gradient is defined by the length of the interval and the difference in phase between the finish and the end. The intention of this is to try and eliminate change in direction of phase that has potential to confuse the algorithm. An identical simulation was ran as in section \ref{sec:simsignals}, the results of this simulation show that there is a majority improvement on bit error across all the transmitters. Notably in three instances, GZQ, HWU and NAA; there is complete bit recovery. 
+
+\begin{table}[h!]\centering
+    \begin{tabular}{l|l|l|l|l|l|l}
+    & \multicolumn{2}{c}{1} & \multicolumn{2}{|c}{2} & \multicolumn{2}{|c}{3} \\
+    \hline
+     & Original $\phi$ & Modified $\phi$  & Modified $\phi$ & Modified $\phi$ & Original $\phi$ & Modified $\phi$ \\
+     \hline
+    GQD & $e^{-4.38}$ & $e^{-4.61}$ & $e^{-4.38}$ & $e^{-4.20}$ & $e^{-5.99}$ & $e^{-5.99}$ \\
+    HWU & $e^{-4.89}$ & $e^{-\inf}$ & $e^{-4.89}$ & $e^{-5.29}$ & $e^{-4.20}$ & $e^{-4.61}$ \\
+    GZQ & $e^{-4.89}$ & $e^{-5.29}$ & $e^{-5.29}$ & $e^{-5.29}$ & $e^{-4.89}$ & $e^{-\inf}$ \\
+    DHO & $e^{-4.05}$ & $e^{-4.61}$ & $e^{-4.05}$ & $e^{-4.38}$ & $e^{-5.29}$ & $e^{-5.99}$ \\
+    NAA & $e^{-5.29}$ & $e^{-\inf}$ & $e^{-4.38}$ & $e^{-4.20}$ & $e^{-3.91}$ & $e^{-4.38}$
+    \end{tabular}%
+\caption{Bit Error Rates of Original Phase and Modified Phase}
+\label{tab:errCorr}
+\end{table}
