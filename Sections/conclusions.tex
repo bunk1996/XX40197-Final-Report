@@ -1,4 +1,22 @@
 \chapter{Conclusions and Further Work}
 \section{Conclusions}
+The overarching aim of this project was to investigate and develop non-data aided error correction of VLF transmissions used for submarine communication. A recovery algorithm was designed and applied to both real and simulated data; with the simulation data used primarily for analysis. The analysis provided the necessary information to develop an error correction technique, across the simulations for the five transmitters. The results were improvements between 0 and 50\%, with a mean improvement of 33\% and a median improvement of 37\%. Although these are substantial improvements, this result is restricted by the current limitations of the method which is still infantile in it's nature. 
+\\\\
+MSK was deemed to be a highly robust communication technique as it is spectrally efficient and requires very high magnitude interference before bit loss begin to occur. Due to the nature of the complex plane, this is what is required in order to significantly alter the instantaneous phase.
+\\\\
+Symbol recovery was achieved using a differential method, combined with the Bit Time, calculated from the instantaneous frequency of the baseband signal. This gave good results in line with the literature. 
+\\\\
+An initial assumption was a correlation between BER and SNR however this was proven to be a very loose correlation, for the real data it can be estimated that bit loss begins to occur when the SNR of the data decreases below 15\si{\decibel}. The simulated signals had a slightly lower SNR threshold however this is likely due to the objective of forcing a bit error, causing artificially high noise levels.
+\\\\
+Error correction was achieved by developing localised metrics to isolate potential points where a bit loss may occur. The phase around these points was approximated to a straight line, as they often represented a false peak. This method worked and improved the BER, however in some instances where a lightning event caused a subtle change to the location of the turning point. Ultimately causing the peak to be 'cut-off' in some instances, which can lead to bit loss if the cut is horizontal.
+\\\\
+The ability to reduce the absolute BER using non-data aided techniques has the advantage of reducing the complexity of encryption. In turn meaning that the length of message is decreased because there is less data required in the message for error correction. Leading to the ability to reduce the complexity of the communication system.
+
 
 \section{Further Work}
+
+Although this project has broadly achieved the original aims that were set. There is more work to be done, this has provided proof of concept that bit loss can be reduced, however the method applied needs optimsing. The major limitation is that the current method can result in the loss of successfully recovered bits. 
+\\\\
+Therefore the major work that needs to be continued is a through development of the local statistics used in order to reduce the number of unnecessary errors that occur and to look at improving the phase estimation used around the points. This work can help identify which is the driving factor behind the process error.
+\\\\
+A further statistic that may be useful to develop alongside what has been discussed in this investigation is to compare the occurance of these points with the estimated noise signal and identify if there are any prevalent local characteristics that can help further isolate the detected indices that are contributing to the bit error.

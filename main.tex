@@ -3,6 +3,7 @@
 \usepackage[british]{babel}
 \usepackage{import}
 \usepackage{setspace}
+
 % \usepackage{appendix}
 \usepackage[bottom]{footmisc}
 \usepackage{siunitx} % Provides the \SI{}{} and \si{} command for typesetting SI units
@@ -56,6 +57,36 @@
 \renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
 \renewcommand{\thelisting}{\arabic{chapter}.\arabic{listing}}
 
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[R]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
+  \renewcommand{\footrulewidth}{0.4pt}% Line at the footer visible
+}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},  
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,        
+    breaklines=true,                
+    captionpos=b,                    
+    keepspaces=true,                
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
 
 
 \begin{document}
@@ -73,12 +104,11 @@
 
 
 \maketitle
-\renewcommand{\abstractname}{Summary}
-% \import{Sections/}{summary.tex}
+
+\import{Sections/}{summary.tex}
 
 \pagestyle{empty}
 \tableofcontents
-
 
 \newpage
 \pagenumbering{roman}
@@ -109,11 +139,14 @@
 \pagebreak
 \import{Sections/}{discussion.tex}
 \pagebreak
-% \import{Sections/}{conclusions.tex}
+\import{Sections/}{conclusions.tex}
 \renewcommand{\bibname}{References}
 % \setstretch{1.0}
 \addcontentsline{toc}{chapter}{References}
 \bibliography{refs}
 % \appendix
+% \addcontentsline{toc}{chapter}{Appendices}
 % \import{Sections/Appendices/}{AppendixA.tex}
+% \import{Sections/Appendices/}{AppendixB.tex}
+% \import{Sections/Appendices/}{AppendixC.tex}
 \end{document}
